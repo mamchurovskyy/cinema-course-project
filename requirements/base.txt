@@ -1,0 +1,6 @@
+Pillow~=9.2
+
+# Django
+django~=3.2
+django-environ==0.9
+django-countries~=7.4
