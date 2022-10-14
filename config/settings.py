@@ -34,6 +34,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS = [
+    "debug_toolbar",
     "django_extensions",
     "django_countries",
 ]
@@ -43,6 +44,7 @@ LOCAL_APPS = []
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -126,3 +128,14 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django Debug Toolbar
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+DEBUG_TOOLBAR_CONFIG = {
+    "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+    "SHOW_TEMPLATE_CONTEXT": True,
+}
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
