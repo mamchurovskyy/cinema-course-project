@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+  <div class="my-3 bg-body rounded shadow w-50 mx-auto">
+    <div class="py-2 rounded-top d-flex justify-content-center" style="background-color: #ccccff">
+      <h2>Login</h2>
+    </div>
+    <div class="p-3">
+      {% if form.non_field_errors %}
+        <div id="error_label" class="p-2 alert alert-danger align-items-center justify-content-center flex-wrap" 
+            role="alert" style="display: flex">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+              class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+          <div class="mx-2">
+            {% for error in form.non_field_errors %}
+              <div>{{ error|escape }}</div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      <form id="login_form" class="border-bottom" method="POST">
+        {% csrf_token %}
+        <div class="my-2">
+          {{ form.username|as_crispy_field }}
+        </div>
+        <div class="my-2">
+          {{ form.password|as_crispy_field }}
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="my-2 d-flex justify-content-center">
+          <button type="submit" class="btn btn-success btn-lg">Login</button>
+        </div>
+      </form>
+      <div class="pt-2">
+        <p class="my-2">Don't have an account? <a href="{% url "account:signup" %}">Sign Up here!</a></p>
+        <p class="my-2"><a href="{% url "account:password_reset" %}">Forgotten your password?</a></p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

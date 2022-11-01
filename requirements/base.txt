@@ -4,3 +4,5 @@ Pillow~=9.2
 django~=3.2
 django-environ==0.9
 django-countries~=7.4
+django-crispy-forms~=1.14
+easy-thumbnails~=2.8

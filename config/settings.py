@@ -37,9 +37,13 @@ THIRD_PARTY_APPS = [
     "debug_toolbar",
     "django_extensions",
     "django_countries",
+    "crispy_forms",
+    "easy_thumbnails",
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "account.apps.AccountConfig",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -59,7 +63,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -139,3 +145,19 @@ DEBUG_TOOLBAR_CONFIG = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# Custom User
+AUTH_USER_MODEL = "account.User"
+
+# Media settings
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Django Crispy Forms
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+LOGOUT_REDIRECT_URL = "account:login"
+LOGIN_URL = "account:profile"
