@@ -8,7 +8,7 @@
     <div class="py-2 rounded-top d-flex justify-content-center" style="background-color: #ccccff">
       <h2>Login</h2>
     </div>
-    <div class="p-3">
+    <div class="px-3 py-1">
       {% if form.non_field_errors %}
         <div id="error_label" class="p-2 alert alert-danger align-items-center justify-content-center flex-wrap" 
             role="alert" style="display: flex">
@@ -23,7 +23,7 @@
           </div>
         </div>
       {% endif %}
-      <form id="login_form" class="border-bottom" method="POST">
+      <form id="login_form" method="POST">
         {% csrf_token %}
         <div class="my-2">
           {{ form.username|as_crispy_field }}
@@ -36,6 +36,29 @@
           <button type="submit" class="btn btn-success btn-lg">Login</button>
         </div>
       </form>
+
+      <div class="divider d-flex align-items-center my-3">
+        <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+      </div>
+
+      <div class="text-center">
+        <a href="{% url "social:begin" "facebook" %}" class="text-decoration-none">
+          <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-facebook-f fa-lg"></i>
+          </button>
+        </a>
+        <a href="{% url "social:begin" "google-oauth2" %}" class="text-decoration-none">
+          <button type="button" class="btn btn-link btn-floating mx-1">
+              <i class="fab fa-google fa-lg"></i>
+          </button>
+        </a>
+        <a href="{% url "social:begin" "github" %}" class="text-decoration-none">
+          <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-github fa-lg"></i>
+          </button>
+        </a>
+      </div>
+
       <div class="pt-2">
         <p class="my-2">Don't have an account? <a href="{% url "account:signup" %}">Sign Up here!</a></p>
         <p class="my-2"><a href="{% url "account:password_reset" %}">Forgotten your password?</a></p>

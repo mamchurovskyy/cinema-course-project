@@ -38,3 +38,15 @@ body {
 .order-by-option:hover {
     color: #7c8287
 }
+
+.divider:after, .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.fab {
+    width: 10px;
+    height: 10px;
+}

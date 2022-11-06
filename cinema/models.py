@@ -93,7 +93,9 @@ class Film(models.Model):
 
 
 class Vote(models.Model):
-    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+    film = models.ForeignKey(
+        Film, related_name="votes", on_delete=models.CASCADE
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )

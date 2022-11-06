@@ -1,5 +1,6 @@
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Avg
 from django.http import (
     Http404,
     HttpResponse,
@@ -9,8 +10,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from cinema import services
-from cinema.models import Film, Genre, Person
+from cinema.models import Film, Genre, Person, Vote
 
 
 def film_list_view(request, genre_slug=None):
@@ -18,7 +18,7 @@ def film_list_view(request, genre_slug=None):
 
     genre = None
     genres = Genre.objects.all()
-    films = Film.objects.all()
+    films = Film.objects.all().select_related("genre")
 
     order_by_value = request.GET.get("order_by", "rating")
 
@@ -71,56 +71,53 @@ def film_list_view(request, genre_slug=None):
 def film_detail_view(request, slug):
     if request.method == "POST":
         if request.user.is_authenticated:
-            if request.user.is_active:
-                value = int(request.POST["vote"])
+            value = int(request.POST["vote"])
 
-                if value > 10 or value < 1:
-                    return JsonResponse(
-                        {"message": "Unvalid vote value"}, status=400
-                    )
-
-                try:
-                    film = services.get_film_by_slug(slug)
-                except (ObjectDoesNotExist, MultipleObjectsReturned):
-                    return JsonResponse(
-                        {"message": "Something went wrong with Film"},
-                        status=400,
-                    )
-
-                new_rating = (
-                    "%.1f"
-                    % services.vote_film_rating(
-                        value, film, request.user
-                    ).rating
-                )
-
+            if value > 10 or value < 1:
                 return JsonResponse(
-                    {
-                        "message": "You voted {}".format(value),
-                        "new_rating": new_rating,
+                    data={"message": "Unvalid vote value!"}, status=400
+                )
+            try:
+                film = Film.objects.get(slug=slug)
+            except (ObjectDoesNotExist, MultipleObjectsReturned):
+                return JsonResponse(
+                    data={
+                        "message": "Impossible to get the film by given slug!"
                     },
-                    status=200,
+                    status=400,
                 )
-            else:
-                return JsonResponse(
-                    {"message": "User is not active"}, status=400
-                )
+
+            Vote.objects.update_or_create(
+                user=request.user,
+                film=film,
+                defaults={"rating": value},
+            )
+            # update film overall rating based on users votes
+            film.rating = film.votes.aggregate(Avg("rating"))["rating__avg"]
+            film.save()
+
+            return JsonResponse(
+                data={"overall_rating": film.rating},
+                status=200,
+            )
         else:
             return JsonResponse(
-                {"message": "User is not authenticated"}, status=400
+                {"message": "You're not authenticated!"}, status=400
             )
     else:
         try:
-            film = services.get_film_by_slug(slug)
+            film = Film.objects.get(slug=slug)
         except ObjectDoesNotExist:
-            raise Http404("Film not found")
+            raise Http404("Film is not found!")
         except MultipleObjectsReturned:
-            raise Http404("Found several records with same id")
+            raise Http404("several records with same IDs were found!")
 
-        if request.user.is_authenticated and request.user.is_active:
+        if request.user.is_authenticated:
             try:
-                vote = services.get_user_vote_rating(slug, request.user.id)
-            except ObjectDoesNotExist or MultipleObjectsReturned:
+                vote = Vote.objects.get(
+                    film__slug=slug, user__id=request.user.id
+                ).rating
+            except (ObjectDoesNotExist, MultipleObjectsReturned):
                 vote = 0
         else:
             vote = 0
@@ -176,18 +173,14 @@ def people_list_view(request, person_role):
 
 def person_detail_view(request, person_id):
     try:
-        person = services.get_person_by_id(person_id=person_id)
+        person = Person.objects.get(id=person_id)
     except ObjectDoesNotExist:
         raise Http404("Person not found.")
     except MultipleObjectsReturned:
         raise Http404("Multiple people with the same ID found.")
 
-    actor_films = services.order_query_by_field(
-        person.starred_films, "-rating"
-    )
-    director_films = services.order_query_by_field(
-        person.directed_films, "-rating"
-    )
+    actor_films = person.starred_films.order_by("-rating")
+    director_films = person.directed_films.order_by("-rating")
 
     return render(
         request=request,

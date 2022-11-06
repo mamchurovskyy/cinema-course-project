@@ -11,6 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 
   <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+  
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -84,9 +86,6 @@
     });
     $(document).ready(function(){
         {% block domready %}
-          $('.nav-link.active').removeClass('active').removeAttr('aria-current');
-          console.log('qqq');
-          $('a[href="' + location.pathname + location.search + '"]').closest('.nav-link').addClass('active').attr('aria-current', 'page'); 
         {% endblock %}
     });
    </script>

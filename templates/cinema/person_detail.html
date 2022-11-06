@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static cinemas_extra %}
+{% load static cinemas_extra thumbnail %}
 
 {% block title %}{{ person.name }}{% endblock %}
 
@@ -8,9 +8,10 @@
     <div class="row">
       <div class="col">
         {% if person.image %}
-          <img class="rounded" src="{{person.image.url}}" height="300" width="200">
+          {% thumbnail person.image 250x250 crop="100%" as im %}
+          <img src="{{ im.url }}" class="rounded">
         {% else %}
-          <img class="rounded" src="{% static 'images/man_question.png' %}" height="300" width="200">
+          <img src="{% static "images/man_question.png" %}" class="card-top">
         {% endif %}
       </div>
       <div class="col">
@@ -45,12 +46,12 @@
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="pills-actor" role="tabpanel" aria-labelledby="pills-actor-tab">
         <div class="d-grid gap-3 mt-3">
-          {% include 'cinema/film_list.html' with film_list=actor_films only%}
+          {% include 'cinema/film_list.html' with films=actor_films only%}
         </div>
       </div>
       <div class="tab-pane fade" id="pills-director" role="tabpanel" aria-labelledby="pills-director-tab">
         <div class="d-grid gap-3 mt-3">
-          {% include 'cinema/film_list.html' with film_list=director_films only%}
+          {% include 'cinema/film_list.html' with films=director_films only%}
         </div>
       </div>
     </div>

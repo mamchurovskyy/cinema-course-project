@@ -7,3 +7,5 @@ django-countries~=7.4
 django-crispy-forms~=1.14
 crispy-bootstrap5~=0.7
 easy-thumbnails~=2.8
+social-auth-app-django~=4.0
+psycopg2-binary~=2.9

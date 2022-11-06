@@ -32,7 +32,7 @@
             {% thumbnail user.profile.avatar 250x250 crop="100%" as im %}
             <div class="my-2 d-flex justify-content-center">
               <a href="{{ user.get_absolute_url }}">
-                <img src="{{ im.url }}" alt="{{ user.get_full_name }}">
+                <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="rounded">
               </a>
             </div>
           {% endif %}
