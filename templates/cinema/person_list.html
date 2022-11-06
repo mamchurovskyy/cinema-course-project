@@ -1,0 +1,22 @@
+{% load static thumbnail %}
+
+{% for person in person_list %}
+  <div class="col col-sm-6 col-lg-4 mb-4">
+    <div class="card border-dark text-center shadow h-100">
+      <div class="bg-image hover-zoom">
+        {% if person.image %}
+          {% thumbnail person.image 250x250 crop="100%" as im %}
+          <img src="{{ im.url }}" class="card-img-top ">
+        {% else %}
+          <img src="{% static "images/man_question.png" %}" class="card-top">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <a href="{% url "cinema:person_detail" person.id %}" class="link-dark">
+          <h5 class="card-title">{{ person.name }}</h5>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+

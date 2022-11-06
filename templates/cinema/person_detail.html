@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static cinemas_extra %}
+
+{% block title %}{{ person.name }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-column align-items-center my-3 p-3 bg-body rounded shadow w-75 mx-auto">
+    <div class="row">
+      <div class="col">
+        {% if person.image %}
+          <img class="rounded" src="{{person.image.url}}" height="300" width="200">
+        {% else %}
+          <img class="rounded" src="{% static 'images/man_question.png' %}" height="300" width="200">
+        {% endif %}
+      </div>
+      <div class="col">
+        <h3>{{ person.name }}</h3>
+        <div class="d-flex flex-column justify-content-center" style="height: 80%">
+          <p><b>Birthday: </b> {% if person.birthday %}{{ person.birthday }}{% endif %}</p>
+          <p><b>Gender: </b> {% if person.gender %}{{ person.get_gender_display }}{% endif %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-3 p-3 bg-body rounded shadow w-75 mx-auto">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
+      <h3>Films</h3>
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-actor-tab" data-bs-toggle="pill" data-bs-target="#pills-actor"
+                  type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+            As Actor
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-director-tab" data-bs-toggle="pill" data-bs-target="#pills-director"
+                  type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+            As Director
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-actor" role="tabpanel" aria-labelledby="pills-actor-tab">
+        <div class="d-grid gap-3 mt-3">
+          {% include 'cinema/film_list.html' with film_list=actor_films only%}
+        </div>
+      </div>
+      <div class="tab-pane fade" id="pills-director" role="tabpanel" aria-labelledby="pills-director-tab">
+        <div class="d-grid gap-3 mt-3">
+          {% include 'cinema/film_list.html' with film_list=director_films only%}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

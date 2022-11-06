@@ -38,11 +38,13 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "django_countries",
     "crispy_forms",
+    "crispy_bootstrap5",
     "easy_thumbnails",
 ]
 
 LOCAL_APPS = [
     "account.apps.AccountConfig",
+    "cinema.apps.CinemaConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -129,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -154,7 +160,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Django Crispy Forms
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

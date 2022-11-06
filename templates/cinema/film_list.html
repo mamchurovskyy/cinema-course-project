@@ -1,0 +1,37 @@
+{% load static cinemas_extra thumbnail %}
+
+{% for film in films %}
+<div class="card border-dark mb-1 shadow" style="/*max-width: 540px;*/">
+  <div class="row g-0">
+    <div class="col-md-3">
+      <img src="{% if film.poster %}{{ film.poster.url }}{% else %}{% static "images/movie_question.png" %}{% endif %}" class="img-fluid rounded-start p-1" height="200" width="143">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body ps-0">
+        <a href="{{ film.get_absolute_url }}">
+          <h5 class="card-title">{{ film.title }}</h5> 
+        </a>
+        {% if film.premiere %}
+          <p class="card-text mb-0"><b>Premiere:</b> {{ film.premiere }}</p>
+        {% endif %}
+        {% if film.country %}
+          <p class="card-text mb-0"><b>Country:</b> <img src="{{ film.country.flag }}" /></p>
+        {% endif %}
+        {% if film.genre %}
+          <p class="card-text mb-0"><b>Genre:</b> <a href="{{ film.genre.get_absolute_url }}">{{ film.genre }}</a></p>
+        {% endif %}
+        <p class="card-text mt-1">{{ film.description|truncatewords:25 }}</p>
+        {% if film.rating != 0 %}
+          <div class="mb-0 d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="orange" 
+                class="bi bi-star-fill" viewBox="0 0 16 16">
+            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+            </svg>
+            <h5 class="mb-0 mx-2">{{ film.rating }}</h5>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}

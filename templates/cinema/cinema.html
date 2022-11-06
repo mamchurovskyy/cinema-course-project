@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static cinemas_extra %}
+
+
+{% block title %}{% if genre %}{{ genre.name }}{% else %}Movies{% endif %}{% endblock %}
+
+{% block content %}
+<div class="my-3 p-3 w-75 mx-auto">
+  <div class="d-flex bg-dark justify-content-between align-items-center text-white rounded">
+    <p><h3 class="my-1">{% if genre %}{{ genre.name }}{% endif %} Movies</h3></p>
+  </div>
+
+  <div class="row gx-0 pt-3 flex-nowrap">
+    <div id="sidebar" class="col-auto col-md-3 col-xl-2 pe-sm-2 px-0">
+      <div class="d-flex flex-column align-items-center px-2 text-white bg-dark rounded">
+        <ul class="list-group list-group-flush">
+          <a href="{% url "cinema:film_list"%}" class="text-decoration-none text-center">
+            <li class="list-group-item list-group-item-action rounded m-2 p-2{% if not genre %} selected" aria-current="true"{% else %}"{% endif %}>
+              <span class="fs-5">All</span> 
+            </li>
+          </a>
+          {% for g in genres %}
+            <a href="{{ g.get_absolute_url }}" class="text-decoration-none text-center">
+              <li class="list-group-item list-group-item-action rounded m-2 p-2{% if genre.slug == g.slug %} selected" aria-current="true"{% else %}"{% endif %}>
+                <span class="fs-5">{{ g.name }}</span>    
+              </li>
+            </a>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col pb-3 ms-2">
+      <div class="d-flex bg-dark justify-content-between align-items-center mb-2 px-2 text-white rounded">
+        <a class="order-by-option text-decoration-none" id="rating" href="#">
+          <h5 class="my-1">Order by rating</h5>
+        </a>
+        <a class="order-by-option text-decoration-none" id="title" href="#">
+          <h5 class="my-1">Order by title</h5>
+        </a>
+        <a class="order-by-option text-decoration-none" id="premiere" href="#">
+          <h5 class="my-1">Order by premiere</h5>
+        </a>
+      </div>
+
+      <div id="films-list" class="d-grid gap-1">
+        {% include 'cinema/film_list.html' with films=films only%}
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block domready %}
+  $(".order-by-option").on('click', function(e) {
+    e.preventDefault();
+
+    const order_by = $(this).attr("id");
+    console.log(order_by);
+    $.ajax({
+      type: "GET",
+      url: window.location.href,
+      data: {
+        'order_by': order_by,
+      },
+      success: function (response) {
+        $('#films-list').html(response);
+      }
+    });
+  });
+
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function() {
+    var margin = $(document).height() - $(window).height() - 300;
+    if($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+      block_request = true;
+      page += 1;
+      $.get('?page=' + page, function(data) {
+        if(data == '') {
+          empty_page = true;
+        }
+        else {
+          block_request = false;
+          $('#films-list').append(data);
+        }
+      });
+    }
+  });
+{% endblock domready %}

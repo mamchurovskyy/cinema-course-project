@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Directors{% endblock %}
+
+{% block content %}
+  <div class="my-3 p-3 w-75 mx-auto">
+    <div class="d-flex bg-dark justify-content-between align-items-center text-white rounded">
+      <p><h3 class="my-1">Directors</h3></p> 
+    </div>
+
+    <div id="directors-list" class="row row-cols-1 row-cols-md-3 mt-3">
+      {% include 'cinema/person_list.html' with person_list=directors only %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block domready %}
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function() {
+    var margin = $(document).height() - $(window).height() - 300;
+    if($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+      block_request = true;
+      page += 1;
+      $.get('?page=' + page, function(data) {
+        if(data == '') {
+          empty_page = true;
+        }
+        else {
+          block_request = false;
+          $('#directors-list').append(data);
+        }
+      });
+    }
+  });
+{% endblock domready %}

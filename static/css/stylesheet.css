@@ -1,0 +1,40 @@
+.card {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.card:hover{
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.05);
+}
+
+body {
+    background-image: url("/static/images/bg.jpg");
+    background-repeat: repeat;
+}
+
+.opacity-50{
+    background: rgba(255, 255, 255, .75);
+}
+
+#sidebar ul li.selected {
+    background:#fff;
+    border-radius: 0.25rem;
+    color:#212529;
+}
+
+.list-group-item {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.list-group-item-action {
+    width: auto;
+}
+
+.order-by-option {
+    color: #fff;
+}
+.order-by-option:hover {
+    color: #7c8287
+}
