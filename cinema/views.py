@@ -1,3 +1,4 @@
+import imdb.services as imdb
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Avg
@@ -122,16 +123,12 @@ def film_detail_view(request, slug):
         else:
             vote = 0
 
-        # imdb_rating = imdb.get_rating_by_title(film.title)
+        imdb_rating = imdb.get_movie_rating_by_title(title=film.title)
 
     return render(
         request,
         "cinema/film_detail.html",
-        {
-            "film": film,
-            "vote": vote,
-            # "imdb_rating": imdb_rating
-        },
+        {"film": film, "vote": vote, "imdb_rating": imdb_rating},
     )
 
 

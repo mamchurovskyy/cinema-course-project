@@ -28,7 +28,7 @@
         <div class="col">
           <div class="d-flex">
             <h6><b>Genre:</b></h6>
-            <h6 class="mx-2">{% if film.genre %}{{ film.genre.name }}{% endif %}</h6>
+            <h6 class="mx-2"><a href="{{ film.genre.get_absolute_url  }}">{% if film.genre %}{{ film.genre.name }}{% endif %}</a></h6>
           </div>
           <div class="d-flex">
             <h6><b>World premiere:</b></h6>

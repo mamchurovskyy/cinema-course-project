@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "account.apps.AccountConfig",
     "cinema.apps.CinemaConfig",
+    "imdb.apps.ImdbConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -229,3 +230,7 @@ SOCIAL_AUTH_GITHUB_SCOPE = ["user:email"]
 SOCIAL_AUTH_GITHUB_PROFILE_EXTRA_PARAMS = {
     "fields": "email, first_name, last_name"
 }
+
+# IMDb API credentials
+IMDB_API_KEY = env("IMDB_API_KEY")
+IMDB_API_HOST = env("IMDB_API_HOST")
