@@ -1,7 +1,7 @@
 import imdb.services as imdb
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from django.http import (
     Http404,
     HttpResponse,
@@ -186,5 +186,27 @@ def person_detail_view(request, person_id):
             "person": person,
             "actor_films": actor_films,
             "director_films": director_films,
+        },
+    )
+
+
+def search_view(request):
+    query = request.GET.get("search_line", "").strip()
+
+    if query:
+        films = Film.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+        people = Person.objects.filter(name__icontains=query)
+    else:
+        films = Film.objects.all()
+        people = Person.objects.all()
+
+    return render(
+        request=request,
+        template_name="cinema/search.html",
+        context={
+            "people": people,
+            "films": films,
         },
     )

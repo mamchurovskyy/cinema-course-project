@@ -6,6 +6,11 @@ app_name = "cinema"
 urlpatterns = [
     path(route="", view=views.film_list_view, name="film_list"),
     path(
+        route="search/",
+        view=views.search_view,
+        name="search",
+    ),
+    path(
         route="<slug:genre_slug>/",
         view=views.film_list_view,
         name="film_list_by_genre",

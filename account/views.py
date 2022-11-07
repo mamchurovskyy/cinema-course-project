@@ -59,8 +59,14 @@ def user_profile_view(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
 
+    votes = request.user.vote_set.all().select_related("film")
+
     return render(
         request=request,
         template_name="registration/profile.html",
-        context={"user_form": user_form, "profile_form": profile_form},
+        context={
+            "user_form": user_form,
+            "profile_form": profile_form,
+            "votes": votes,
+        },
     )
